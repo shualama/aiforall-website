@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 170" role="img" aria-label="AI for All — الذكاء الاصطناعي للجميع">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3ec98a"/>
+      <stop offset="1" stop-color="#169b62"/>
+    </linearGradient>
+  </defs>
+  <!-- mark: a community of nodes, all connected to one shared intelligence -->
+  <g stroke="url(#g)" stroke-width="2.5" fill="none" opacity=".85">
+    <line x1="85" y1="85" x2="85" y2="33"/>
+    <line x1="85" y1="85" x2="130" y2="59"/>
+    <line x1="85" y1="85" x2="130" y2="111"/>
+    <line x1="85" y1="85" x2="85" y2="137"/>
+    <line x1="85" y1="85" x2="40" y2="111"/>
+    <line x1="85" y1="85" x2="40" y2="59"/>
+    <circle cx="85" cy="85" r="62" stroke-dasharray="4 7" opacity=".5"/>
+  </g>
+  <g fill="url(#g)">
+    <circle cx="85" cy="85" r="14"/>
+    <circle cx="85" cy="33" r="8"/>
+    <circle cx="130" cy="59" r="8"/>
+    <circle cx="130" cy="111" r="8"/>
+    <circle cx="85" cy="137" r="8"/>
+    <circle cx="40" cy="111" r="8"/>
+    <circle cx="40" cy="59" r="8"/>
+  </g>
+  <circle cx="85" cy="85" r="6" fill="#0a1628"/>
+  <!-- wordmark -->
+  <text x="170" y="78" font-family="Tajawal, Arial, sans-serif" font-weight="800" font-size="52" fill="#ffffff">AI for <tspan fill="#3ec98a">All</tspan></text>
+  <text x="170" y="118" font-family="Tajawal, Arial, sans-serif" font-weight="500" font-size="24" fill="#b9c8d7">الذكاء الاصطناعي للجميع</text>
+</svg>

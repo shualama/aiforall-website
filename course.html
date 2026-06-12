@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل الأول: أساسيات الذكاء الاصطناعي — AI for All</title>
+<meta name="description" content="فصل تعليمي مبني على محتوى الموسم الأول من برنامج خوارزميات، مع اختبار وشهادة إتمام.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1628; --navy2:#11263f; --card:#142e4d;
+  --green:#169b62; --green-l:#3ec98a; --gold:#f0c85a;
+  --txt:#eef4fa; --muted:#b9c8d7; --red:#e2685f;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--txt);line-height:2}
+a{color:var(--green-l);text-decoration:none}
+.container{max-width:880px;margin:0 auto;padding:0 24px}
+
+nav{position:sticky;top:0;z-index:50;background:rgba(10,22,40,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(62,201,138,.25)}
+nav .container{display:flex;align-items:center;justify-content:space-between;height:64px;max-width:1100px}
+.brand{display:flex;direction:ltr;align-items:center;gap:10px;font-weight:800;font-size:1.2rem;color:var(--txt)}
+.brand span{color:var(--green-l)}
+nav a.back{color:var(--muted);font-weight:500}
+nav a.back:hover{color:var(--green-l)}
+
+header.course{padding:64px 0 40px;text-align:center;
+  background:radial-gradient(ellipse at 80% 110%, rgba(22,155,98,.22), transparent 55%), linear-gradient(180deg,var(--navy),var(--navy2))}
+.kicker{display:inline-block;background:rgba(22,155,98,.18);color:var(--green-l);border:1px solid rgba(62,201,138,.4);
+  padding:4px 18px;border-radius:30px;font-size:.92rem;font-weight:500;margin-bottom:16px}
+header.course h1{font-size:clamp(1.8rem,5vw,2.7rem);font-weight:800}
+header.course p{color:var(--muted);max-width:640px;margin:14px auto 0}
+
+article{padding:48px 0}
+article h2{color:var(--green-l);font-size:1.45rem;font-weight:800;margin:40px 0 12px}
+article h2:first-child{margin-top:0}
+article p{margin-bottom:16px;color:#dbe6f1}
+article .term{color:var(--gold);font-weight:700}
+.tipbox{background:var(--card);border-right:4px solid var(--green);border-radius:12px;padding:18px 22px;margin:22px 0;color:var(--muted)}
+.tipbox b{color:var(--green-l)}
+table.cmp{width:100%;border-collapse:collapse;margin:18px 0;font-size:.98rem}
+table.cmp th{background:var(--card);color:var(--green-l);padding:10px 14px;text-align:right}
+table.cmp td{border:1px solid rgba(62,201,138,.2);padding:10px 14px;color:var(--muted)}
+ul.pts{margin:0 22px 16px 0;color:#dbe6f1}
+ul.pts li{margin-bottom:8px}
+
+#exam{padding:56px 0;background:var(--navy2)}
+#exam h2.sec{font-size:1.9rem;font-weight:800}
+h2.sec::after{content:"";display:block;width:64px;height:4px;background:var(--green);border-radius:4px;margin-top:10px}
+.sec-sub{color:var(--muted);margin:14px 0 30px}
+.namebox{background:var(--card);border:1px solid rgba(62,201,138,.3);border-radius:14px;padding:22px;margin-bottom:28px}
+.namebox label{font-weight:700;display:block;margin-bottom:10px}
+.namebox input{width:100%;max-width:440px;padding:12px 16px;border-radius:10px;border:1px solid rgba(62,201,138,.4);
+  background:var(--navy);color:var(--txt);font-family:inherit;font-size:1.05rem}
+.q{background:var(--card);border-radius:14px;padding:20px 22px;margin-bottom:18px;border:1px solid transparent}
+.q h3{font-size:1.08rem;margin-bottom:12px}
+.q label{display:block;padding:9px 14px;border-radius:10px;cursor:pointer;color:var(--muted);transition:background .15s}
+.q label:hover{background:rgba(62,201,138,.1)}
+.q input{margin-left:10px;accent-color:var(--green)}
+.q.correct{border-color:var(--green-l)}
+.q.wrong{border-color:var(--red)}
+.btn{display:inline-block;background:var(--green);color:#fff;font-weight:700;border:none;cursor:pointer;
+  padding:13px 44px;border-radius:40px;font-size:1.08rem;font-family:inherit;transition:background .2s}
+.btn:hover{background:var(--green-l);color:var(--navy)}
+.result{margin-top:24px;padding:20px 24px;border-radius:14px;font-weight:700;display:none}
+.result.pass{display:block;background:rgba(22,155,98,.16);border:1px solid var(--green-l);color:var(--green-l)}
+.result.fail{display:block;background:rgba(226,104,95,.12);border:1px solid var(--red);color:var(--red)}
+
+#certificate{padding:56px 0;display:none}
+#certCanvas{width:100%;max-width:880px;border-radius:14px;border:1px solid rgba(62,201,138,.35);box-shadow:0 18px 60px rgba(0,0,0,.45)}
+.cert-actions{margin-top:20px;display:flex;gap:14px;flex-wrap:wrap}
+
+footer{background:#08121f;padding:32px 0;text-align:center;color:var(--muted);font-size:.95rem}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="brand"><svg width="34" height="34" viewBox="30 25 115 120"><g stroke="#3ec98a" stroke-width="3" fill="none" opacity=".85"><line x1="85" y1="85" x2="85" y2="33"/><line x1="85" y1="85" x2="130" y2="59"/><line x1="85" y1="85" x2="130" y2="111"/><line x1="85" y1="85" x2="85" y2="137"/><line x1="85" y1="85" x2="40" y2="111"/><line x1="85" y1="85" x2="40" y2="59"/></g><g fill="#169b62"><circle cx="85" cy="85" r="14"/><circle cx="85" cy="33" r="8"/><circle cx="130" cy="59" r="8"/><circle cx="130" cy="111" r="8"/><circle cx="85" cy="137" r="8"/><circle cx="40" cy="111" r="8"/><circle cx="40" cy="59" r="8"/></g></svg>
+      AI for <span>All</span></div>
+    <a class="back" href="index.html">→ العودة للرئيسية</a>
+  </div>
+</nav>
+
+<header class="course">
+  <div class="container">
+    <span class="kicker">المسار التعليمي — مبني على حلقات برنامج خوارزميات</span>
+    <h1>الفصل الأول: أساسيات الذكاء الاصطناعي</h1>
+    <p>اقرأ الفصل، ثم اختبر فهمك بعشرة أسئلة. عند الإجابة على 7 أسئلة صحيحة أو أكثر تحصل على شهادة إتمام باسمك.</p>
+  </div>
+</header>
+
+<article>
+  <div class="container">
+    <h2>١. ما الذكاء الاصطناعي؟</h2>
+    <p>أبسط تعريف للذكاء الاصطناعي أنه <span class="term">محاكاة تفكير الإنسان</span> بواسطة الحاسوب: أنظمة تتعلم من البيانات، وتستنتج، وتتخذ قرارات أو تنتج محتوى، في مهام كانت تتطلب تقليدياً ذكاءً بشرياً. وهو ليس تقنية واحدة، بل عائلة من التقنيات تتدرج من أنظمة بسيطة تتبع قواعد محددة، إلى نماذج ضخمة تتعلم بنفسها من كم هائل من البيانات.</p>
+
+    <h2>٢. لمحة تاريخية: من الخمسينات إلى الطفرة</h2>
+    <p>بدأ مفهوم الذكاء الاصطناعي في <span class="term">خمسينات القرن الماضي</span>، وتعثر مسيره أكثر من مرة فيما يعرف بـ«شتاء الذكاء الاصطناعي»، قبل أن تتوالى الانطلاقات: من <span class="term">تعلم الآلة</span> (أنظمة تتعلم الأنماط من البيانات بدل برمجتها يدوياً)، إلى <span class="term">التعلم العميق</span> (شبكات عصبية متعددة الطبقات مستلهمة من دماغ الإنسان)، وصولاً إلى الطفرة الأخيرة التي نعيشها اليوم مع النماذج التوليدية. ثلاثة عوامل صنعت هذه الطفرة: تضخم حجم البيانات المتاحة، وقفزة في قوة المعالجة، وتطور بنية النماذج نفسها.</p>
+
+    <h2>٣. الذكاء الاصطناعي التقليدي والتوليدي.. ما الفرق؟</h2>
+    <p>الفارق الجوهري في كلمة واحدة: <span class="term">الابتكار</span>. الذكاء الاصطناعي التقليدي ذكي ضمن حدود ما أعطيته: يتعلم من بيانات محددة ويعمل وفق إجراءات معينة — مثل نظام يصنف الصور أو يتنبأ بالطلب على منتج. أما الذكاء الاصطناعي <span class="term">التوليدي</span> فيبتكر محتوى جديداً لم يكن موجوداً: نصوصاً وصوراً وأصواتاً وبرمجيات، مولّفاً إجاباته من أنماط تعلمها.</p>
+    <table class="cmp">
+      <tr><th></th><th>التقليدي</th><th>التوليدي</th></tr>
+      <tr><td><b>طبيعة العمل</b></td><td>يصنف ويتنبأ ضمن ما تعلمه</td><td>يبتكر محتوى جديداً</td></tr>
+      <tr><td><b>المخرجات</b></td><td>قرار أو تصنيف أو رقم</td><td>نص، صورة، صوت، كود</td></tr>
+      <tr><td><b>أمثلة</b></td><td>توصيات المتاجر، فلترة البريد</td><td>ChatGPT, Gemini, Copilot</td></tr>
+    </table>
+
+    <h2>٤. النماذج اللغوية الكبيرة LLM</h2>
+    <p>وراء تطبيقات المحادثة الشهيرة تقف <span class="term">النماذج اللغوية الكبيرة</span> (Large Language Models — LLM): نماذج دُرّبت على بيانات نصية ضخمة من العالم حتى تعلمت أنماط اللغة والمعرفة. ومن هنا جاءت قدرتها على الحوار والتلخيص والترجمة وصياغة المحتوى. ونحن اليوم في مرحلة تالية: <span class="term">تخصيص</span> هذه النماذج في علوم ومجالات بعينها، لتحصل على مساعد لغوي خبير في مجالك أنت.</p>
+
+    <h2>٥. هندسة الأوامر: اسأل بذكاء</h2>
+    <p>لماذا يحصل شخصان على نتيجتين مختلفتين تماماً من التطبيق نفسه؟ السر في <span class="term">هندسة الأوامر</span> (Prompt Engineering): فن صياغة الطلب. كلما كان أمرك دقيقاً ووافياً — تحدد فيه السياق، والدور المطلوب من النموذج، وشكل المخرجات — كانت الإجابة أدق وأنفع.</p>
+    <div class="tipbox"><b>قاعدة عملية:</b> بدل «اكتب لي عن التسويق»، قل: «أنت خبير تسويق رقمي. اكتب خطة من خمس نقاط لمتجر عطور سعودي ناشئ، موجهة لجمهور الشباب، بأسلوب مختصر وجداول واضحة». السياق + الدور + التفاصيل = نتيجة أفضل.</div>
+
+    <h2>٦. الهلوسة.. ولماذا تخطئ النماذج بثقة؟</h2>
+    <p>قد يفاجئك التطبيق بمعلومة خاطئة يقدمها بثقة تامة، بل ويدافع عنها إذا صححته! تسمى هذه الظاهرة <span class="term">الهلوسة</span>، وتحدث لأن النموذج يولّف الإجابة الأرجح لغوياً من أنماط تدريبه، ولا «يعرف» الحقيقة بمفهومنا. ومن أنجح علاجاتها تقنية <span class="term">RAG</span> (التوليد المعزز بالاسترجاع): ربط النموذج بمصادر موثوقة نحددها نحن، فيجيب منها ويذكر مصادره — بدل الاعتماد على ذاكرته وحدها.</p>
+
+    <h2>٧. الاستخدام المسؤول: بياناتك ثروتك</h2>
+    <p>دخولك عالم الذكاء الاصطناعي لا يعني الموافقة على كشف كل شيء. القاعدة الذهبية: <span class="term">صنّف بياناتك قبل مشاركتها</span> — عامة، حساسة، شديدة الحساسية — ولا تضع في المساعدات الذكية العامة ما لا ترضى أن يطلع عليه الغير، خصوصاً بيانات العمل والعملاء. وللمؤسسات ذات البيانات الحساسة حلول مثل النماذج المحلية التي تعمل دون إنترنت.</p>
+
+    <h2>خلاصة الفصل</h2>
+    <ul class="pts">
+      <li>الذكاء الاصطناعي = محاكاة تفكير الإنسان، وبدأ من الخمسينات وتطور عبر تعلم الآلة فالتعلم العميق.</li>
+      <li>التوليدي يبتكر محتوى جديداً، والتقليدي يصنف ويتنبأ ضمن ما تعلمه.</li>
+      <li>الـ LLM نماذج لغوية ضخمة، وهندسة الأوامر مفتاح الاستفادة منها.</li>
+      <li>الهلوسة واردة — وRAG يعالجها بربط النموذج بمصادر موثوقة.</li>
+      <li>صنّف بياناتك قبل مشاركتها مع أي مساعد ذكي.</li>
+    </ul>
+  </div>
+</article>
+
+<section id="exam">
+  <div class="container">
+    <h2 class="sec">اختبار الفصل الأول</h2>
+    <p class="sec-sub">10 أسئلة — النجاح من 7 إجابات صحيحة فأكثر. أدخل اسمك كما تريد أن يظهر في الشهادة.</p>
+    <div class="namebox">
+      <label for="studentName">الاسم الكامل</label>
+      <input id="studentName" type="text" placeholder="مثال: عبدالله بن محمد العتيبي" autocomplete="name">
+    </div>
+    <div id="questions"></div>
+    <button class="btn" id="submitBtn">تصحيح الاختبار</button>
+    <div class="result" id="resultBox"></div>
+  </div>
+</section>
+
+<section id="certificate">
+  <div class="container">
+    <h2 class="sec">🎉 شهادتك جاهزة</h2>
+    <p class="sec-sub">يمكنك تنزيلها ومشاركتها — نسعد بوسمنا عند نشرها.</p>
+    <canvas id="certCanvas" width="1600" height="1131"></canvas>
+    <div class="cert-actions">
+      <button class="btn" id="downloadBtn">⬇ تنزيل الشهادة (PNG)</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>AI for All — الذكاء الاصطناعي للجميع | مبادرة شخصية تطوعية</p>
+  <p>م. مصطفى الشعلة © <span id="yr"></span></p>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+const QUESTIONS = [
+  {q:"ما أبسط تعريف للذكاء الاصطناعي؟", o:["برمجة مواقع الإنترنت","محاكاة تفكير الإنسان بواسطة الحاسوب","تخزين البيانات في السحابة","صناعة أجهزة الحاسوب"], a:1},
+  {q:"متى بدأ مفهوم الذكاء الاصطناعي؟", o:["في التسعينات","مع إطلاق الهواتف الذكية","في خمسينات القرن الماضي","عام 2022"], a:2},
+  {q:"ما الفارق الجوهري الذي يميز الذكاء الاصطناعي التوليدي؟", o:["أنه أسرع في الحسابات","أنه يبتكر محتوى جديداً","أنه لا يحتاج كهرباء","أنه يعمل بدون بيانات"], a:1},
+  {q:"أي مما يلي مثال على تطبيق ذكاء اصطناعي توليدي؟", o:["الآلة الحاسبة","فلترة البريد المزعج","ChatGPT","جدول بيانات Excel"], a:2},
+  {q:"ما معنى الاختصار LLM؟", o:["نموذج لغوي كبير","شبكة اتصالات محلية","لغة برمجة منخفضة","مقياس سرعة المعالج"], a:0},
+  {q:"ما المقصود بهندسة الأوامر (Prompt Engineering)؟", o:["تصميم لوحات التحكم الكهربائية","فن صياغة طلبات دقيقة للحصول على نتائج أفضل","برمجة الروبوتات الصناعية","إصلاح أعطال التطبيقات"], a:1},
+  {q:"أي صياغة تحقق نتيجة أفضل من نموذج ذكاء اصطناعي؟", o:["«اكتب عن التسويق»","«ساعدني»","أمر يحدد السياق والدور وشكل المخرجات","سؤال من كلمة واحدة"], a:2},
+  {q:"ماذا نسمي تقديم النموذج معلومة خاطئة بثقة تامة؟", o:["التشفير","الهلوسة","الأتمتة","الضغط"], a:1},
+  {q:"ما التقنية التي تعالج الهلوسة بربط النموذج بمصادر موثوقة؟", o:["USB","RAM","RAG","GPS"], a:2},
+  {q:"ما القاعدة الذهبية قبل مشاركة بياناتك مع مساعد ذكي؟", o:["مشاركة كل شيء لتحسين النتائج","تصنيف البيانات وعدم مشاركة الحساس منها","استخدام أسماء مستعارة فقط","إغلاق الجهاز بعد الاستخدام"], a:1},
+];
+const PASS = 7;
+
+const qWrap = document.getElementById('questions');
+QUESTIONS.forEach((item, i) => {
+  const div = document.createElement('div');
+  div.className = 'q'; div.id = 'q' + i;
+  div.innerHTML = '<h3>' + (i+1) + '. ' + item.q + '</h3>' +
+    item.o.map((opt, j) =>
+      `<label><input type="radio" name="q${i}" value="${j}">${opt}</label>`).join('');
+  qWrap.appendChild(div);
+});
+
+document.getElementById('submitBtn').addEventListener('click', async () => {
+  const name = document.getElementById('studentName').value.trim();
+  const resultBox = document.getElementById('resultBox');
+  if (!name) {
+    resultBox.className = 'result fail';
+    resultBox.textContent = 'فضلاً أدخل اسمك أولاً ليظهر في الشهادة.';
+    document.getElementById('studentName').focus();
+    return;
+  }
+  let score = 0;
+  QUESTIONS.forEach((item, i) => {
+    const el = document.getElementById('q' + i);
+    const chosen = document.querySelector(`input[name="q${i}"]:checked`);
+    const ok = chosen && parseInt(chosen.value) === item.a;
+    el.className = 'q ' + (ok ? 'correct' : 'wrong');
+    if (ok) score++;
+  });
+  if (score >= PASS) {
+    resultBox.className = 'result pass';
+    resultBox.textContent = `ممتاز يا ${name}! نتيجتك ${score} من ${QUESTIONS.length} — تم إنشاء شهادتك بالأسفل.`;
+    await drawCertificate(name, score);
+    document.getElementById('certificate').style.display = 'block';
+    document.getElementById('certificate').scrollIntoView({behavior:'smooth'});
+  } else {
+    resultBox.className = 'result fail';
+    resultBox.textContent = `نتيجتك ${score} من ${QUESTIONS.length}. تحتاج ${PASS} إجابات صحيحة — راجع الفصل أعلاه وأعد المحاولة، الأسئلة الخاطئة محددة بالأحمر.`;
+    document.getElementById('certificate').style.display = 'none';
+  }
+});
+
+function drawMark(ctx, cx, cy, s, light) {
+  const nodes = [[0,-1],[0.87,-0.5],[0.87,0.5],[0,1],[-0.87,0.5],[-0.87,-0.5]];
+  ctx.strokeStyle = light ? '#3ec98a' : '#169b62';
+  ctx.lineWidth = s * 0.05;
+  nodes.forEach(([x,y]) => {
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + x*s, cy + y*s); ctx.stroke();
+  });
+  ctx.fillStyle = '#3ec98a';
+  ctx.beginPath(); ctx.arc(cx, cy, s*0.27, 0, 7); ctx.fill();
+  nodes.forEach(([x,y]) => {
+    ctx.beginPath(); ctx.arc(cx + x*s, cy + y*s, s*0.15, 0, 7); ctx.fill();
+  });
+  ctx.fillStyle = '#0a1628';
+  ctx.beginPath(); ctx.arc(cx, cy, s*0.11, 0, 7); ctx.fill();
+}
+
+async function drawCertificate(name, score) {
+  await document.fonts.ready;
+  await Promise.all([
+    document.fonts.load('800 80px Tajawal'),
+    document.fonts.load('700 56px Tajawal'),
+    document.fonts.load('500 34px Tajawal'),
+  ]);
+  const c = document.getElementById('certCanvas');
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+
+  // background
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, '#0a1628'); bg.addColorStop(1, '#11263f');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+  const glow = ctx.createRadialGradient(W*0.85, H*0.95, 50, W*0.85, H*0.95, 600);
+  glow.addColorStop(0, 'rgba(22,155,98,.35)'); glow.addColorStop(1, 'rgba(22,155,98,0)');
+  ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+
+  // borders
+  ctx.strokeStyle = '#169b62'; ctx.lineWidth = 10; ctx.strokeRect(30, 30, W-60, H-60);
+  ctx.strokeStyle = '#f0c85a'; ctx.lineWidth = 2; ctx.strokeRect(52, 52, W-104, H-104);
+
+  // logo mark + initiative name
+  drawMark(ctx, W/2, 175, 62, true);
+  ctx.textAlign = 'center'; ctx.direction = 'rtl';
+  ctx.fillStyle = '#ffffff'; ctx.font = '800 46px Tajawal';
+  ctx.fillText('AI for All — الذكاء الاصطناعي للجميع', W/2, 305);
+  ctx.fillStyle = '#b9c8d7'; ctx.font = '500 26px Tajawal';
+  ctx.fillText('مبادرة لتمكين الجميع من أدوات الذكاء الاصطناعي وتوظيفها للخير', W/2, 348);
+
+  // title
+  ctx.fillStyle = '#f0c85a'; ctx.font = '800 84px Tajawal';
+  ctx.fillText('شهادة إتمام', W/2, 465);
+
+  ctx.fillStyle = '#b9c8d7'; ctx.font = '500 34px Tajawal';
+  ctx.fillText('تُمنح هذه الشهادة إلى', W/2, 540);
+
+  // name
+  ctx.fillStyle = '#ffffff'; ctx.font = '800 78px Tajawal';
+  ctx.fillText(name, W/2, 645);
+  ctx.strokeStyle = 'rgba(62,201,138,.6)'; ctx.lineWidth = 3;
+  const nw = Math.min(ctx.measureText(name).width + 80, W - 300);
+  ctx.beginPath(); ctx.moveTo(W/2 - nw/2, 672); ctx.lineTo(W/2 + nw/2, 672); ctx.stroke();
+
+  ctx.fillStyle = '#dbe6f1'; ctx.font = '500 36px Tajawal';
+  ctx.fillText('لإتمامه بنجاح «الفصل الأول: أساسيات الذكاء الاصطناعي»', W/2, 745);
+  ctx.fillStyle = '#3ec98a'; ctx.font = '500 30px Tajawal';
+  ctx.fillText('ضمن المسار التعليمي المبني على حلقات برنامج خوارزميات', W/2, 795);
+
+  // score + date
+  const dateStr = new Date().toLocaleDateString('ar-SA', {year:'numeric', month:'long', day:'numeric'});
+  ctx.fillStyle = '#b9c8d7'; ctx.font = '500 28px Tajawal';
+  ctx.fillText(`النتيجة: ${score} من 10  •  التاريخ: ${dateStr}`, W/2, 860);
+
+  // signature
+  ctx.strokeStyle = 'rgba(185,200,215,.5)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(W/2 - 200, 975); ctx.lineTo(W/2 + 200, 975); ctx.stroke();
+  ctx.fillStyle = '#ffffff'; ctx.font = '700 34px Tajawal';
+  ctx.fillText('م. مصطفى الشعلة', W/2, 1020);
+  ctx.fillStyle = '#b9c8d7'; ctx.font = '500 24px Tajawal';
+  ctx.fillText('مؤسس المبادرة — خبير الذكاء الاصطناعي وعلوم البيانات', W/2, 1056);
+
+  // certificate id
+  const cid = 'AIFA-' + Date.now().toString(36).toUpperCase();
+  ctx.textAlign = 'left'; ctx.direction = 'ltr';
+  ctx.fillStyle = 'rgba(185,200,215,.55)'; ctx.font = '400 20px Tajawal';
+  ctx.fillText(cid, 70, H - 72);
+}
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const a = document.createElement('a');
+  a.download = 'AIforAll-Certificate.png';
+  a.href = document.getElementById('certCanvas').toDataURL('image/png');
+  a.click();
+});
+</script>
+</body>
+</html>

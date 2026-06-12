@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for All — الذكاء الاصطناعي للجميع</title>
+<meta name="description" content="مبادرة لتمكين الجميع من تعلم أدوات الذكاء الاصطناعي وتوظيفها للخير. استمع لحلقات برنامج خوارزميات على إذاعة الرياض.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1628; --navy2:#11263f; --card:#142e4d;
+  --green:#169b62; --green-l:#3ec98a; --gold:#f0c85a;
+  --txt:#eef4fa; --muted:#b9c8d7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--txt);line-height:1.8}
+a{color:var(--green-l);text-decoration:none}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* Nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(10,22,40,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(62,201,138,.25)}
+nav .container{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;direction:ltr;align-items:center;gap:10px;font-weight:800;font-size:1.3rem;color:var(--txt)}
+.brand span{color:var(--green-l)}
+nav ul{display:flex;gap:28px;list-style:none}
+nav ul a{color:var(--muted);font-weight:500;transition:color .2s}
+nav ul a:hover{color:var(--green-l)}
+
+/* Hero */
+.hero{position:relative;padding:90px 0 70px;text-align:center;overflow:hidden;
+  background:radial-gradient(ellipse at 80% 110%, rgba(22,155,98,.25), transparent 55%), linear-gradient(180deg,var(--navy),var(--navy2))}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800}
+.hero h1 em{font-style:normal;color:var(--green-l)}
+.hero p.tag{color:var(--gold);font-size:1.3rem;font-weight:500;margin-top:10px}
+.hero p.sub{max-width:720px;margin:22px auto 0;color:var(--muted);font-size:1.08rem}
+.cta{display:inline-block;margin-top:34px;background:var(--green);color:#fff;font-weight:700;
+  padding:14px 42px;border-radius:40px;font-size:1.1rem;transition:background .2s}
+.cta:hover{background:var(--green-l);color:var(--navy)}
+
+/* Sections */
+section{padding:72px 0}
+h2.sec{font-size:2rem;font-weight:800;margin-bottom:8px}
+h2.sec::after{content:"";display:block;width:64px;height:4px;background:var(--green);border-radius:4px;margin-top:10px}
+.sec-sub{color:var(--muted);margin:14px 0 36px;max-width:760px}
+
+/* Objectives */
+.goals{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
+.goal{background:var(--card);border:1px solid rgba(62,201,138,.18);border-radius:16px;padding:26px}
+.goal .ic{font-size:1.9rem}
+.goal h3{margin:10px 0 6px;font-size:1.15rem;color:var(--green-l)}
+.goal p{color:var(--muted);font-size:.97rem}
+
+/* Program */
+#program{background:var(--navy2)}
+.program-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+.program-grid img{width:100%;border-radius:16px;border:1px solid rgba(62,201,138,.25)}
+.badge{display:inline-block;background:rgba(22,155,98,.18);color:var(--green-l);border:1px solid rgba(62,201,138,.4);
+  padding:4px 16px;border-radius:30px;font-size:.9rem;font-weight:500;margin-bottom:14px}
+.program-info p{color:var(--muted);margin-bottom:14px}
+.host{display:flex;gap:14px;align-items:center;margin-top:22px;background:var(--card);padding:16px 20px;border-radius:14px}
+.host .avatar-photo{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--green-l);flex-shrink:0}
+.host b{display:block}
+.host small{color:var(--muted)}
+
+/* Playlist */
+.player-box{background:var(--card);border:1px solid rgba(62,201,138,.25);border-radius:18px;padding:26px;margin-bottom:30px;
+  position:sticky;top:74px;z-index:10}
+.now-title{font-weight:700;font-size:1.15rem;color:var(--green-l)}
+.now-tag{color:var(--gold);font-size:.95rem;margin-bottom:14px}
+audio{width:100%}
+.ep-list{display:grid;gap:12px}
+.ep{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid transparent;
+  border-radius:14px;padding:16px 18px;cursor:pointer;transition:border .2s,transform .15s}
+.ep:hover{border-color:rgba(62,201,138,.5);transform:translateY(-1px)}
+.ep.active{border-color:var(--green-l);background:#173a5e}
+.ep .num{flex-shrink:0;width:46px;height:46px;border-radius:12px;background:var(--green);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800}
+.ep h4{font-size:1.05rem}
+.ep p{color:var(--muted);font-size:.92rem;margin-top:2px}
+.ep .yt{margin-top:6px;display:inline-block;font-size:.85rem}
+
+/* Footer */
+footer{background:#08121f;padding:40px 0;text-align:center;color:var(--muted);font-size:.95rem}
+footer .logos{display:flex;justify-content:center;align-items:center;gap:18px;margin-bottom:16px}
+footer img{height:60px;border-radius:10px;background:#fff;padding:4px}
+
+@media (max-width:820px){
+  .program-grid{grid-template-columns:1fr}
+  nav ul{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="brand"><svg width="34" height="34" viewBox="30 25 115 120"><g stroke="#3ec98a" stroke-width="3" fill="none" opacity=".85"><line x1="85" y1="85" x2="85" y2="33"/><line x1="85" y1="85" x2="130" y2="59"/><line x1="85" y1="85" x2="130" y2="111"/><line x1="85" y1="85" x2="85" y2="137"/><line x1="85" y1="85" x2="40" y2="111"/><line x1="85" y1="85" x2="40" y2="59"/></g><g fill="#169b62"><circle cx="85" cy="85" r="14"/><circle cx="85" cy="33" r="8"/><circle cx="130" cy="59" r="8"/><circle cx="130" cy="111" r="8"/><circle cx="85" cy="137" r="8"/><circle cx="40" cy="111" r="8"/><circle cx="40" cy="59" r="8"/></g></svg>AI for <span>All</span></div>
+    <ul>
+      <li><a href="#about">عن المبادرة</a></li>
+      <li><a href="#activities">الأنشطة</a></li>
+      <li><a href="#program">برنامج خوارزميات</a></li>
+      <li><a href="#season1">حلقات الموسم الأول</a></li>
+      <li><a href="course.html">📜 المسار التعليمي</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <h1>AI for <em>All</em> — الذكاء الاصطناعي <em>للجميع</em></h1>
+    <p class="tag">مبادرة لتمكين الجميع من أدوات الذكاء الاصطناعي وتوظيفها للخير</p>
+    <p class="sub">نؤمن أن الذكاء الاصطناعي ليس حكراً على المتخصصين؛ بل أداة يمكن لكل فرد في الوطن أن يتعلمها ويوظفها في تعليمه وعمله وحياته، بوعي ومسؤولية.</p>
+    <a class="cta" href="#season1">🎧 استمع للحلقات</a>
+  </div>
+</header>
+
+<section id="about">
+  <div class="container">
+    <h2 class="sec">عن المبادرة</h2>
+    <p class="sec-sub">«AI for All» مبادرة شخصية تطوعية يقودها م. مصطفى الشعلة، خبير الذكاء الاصطناعي وعلوم البيانات، تستهدف تبسيط مفاهيم الذكاء الاصطناعي ونشر الوعي بأدواته بين جميع فئات المجتمع السعودي — عبر أنشطة متنوعة أولها برنامج إذاعي، وتتسع لاحقاً لمزيد من الأنشطة والمحتوى.</p>
+    <div class="goals">
+      <div class="goal"><div class="ic">📚</div><h3>التعليم والتبسيط</h3><p>تبسيط مفاهيم الذكاء الاصطناعي وتقديمها بلغة يفهمها الجميع، من الطالب إلى رائد الأعمال.</p></div>
+      <div class="goal"><div class="ic">🛠️</div><h3>التمكين العملي</h3><p>تدريب الأفراد على استخدام أدوات الذكاء الاصطناعي في الدراسة والعمل والمشاريع.</p></div>
+      <div class="goal"><div class="ic">🛡️</div><h3>الوعي والأمان</h3><p>نشر ثقافة الاستخدام الآمن: الخصوصية، حماية البيانات، والتعامل مع الاحتيال الرقمي.</p></div>
+      <div class="goal"><div class="ic">🇸🇦</div><h3>مواكبة رؤية 2030</h3><p>الإسهام في التحول الوطني نحو اقتصاد المعرفة ودعم المبادرات الوطنية مثل SAMAI.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="activities" style="padding-top:0">
+  <div class="container">
+    <h2 class="sec">أنشطة المبادرة</h2>
+    <p class="sec-sub">برنامج خوارزميات هو النشاط الأول للمبادرة.. وأنشطة أخرى في الطريق.</p>
+    <div class="goals">
+      <div class="goal"><div class="ic">🎙️</div><h3>برنامج خوارزميات</h3><p>برنامج إذاعي أسبوعي على إذاعة الرياض — اكتمل موسمه الأول بـ 32 حلقة. <a href="#program">تعرف عليه</a></p></div>
+      <div class="goal" style="opacity:.7"><div class="ic">🧑‍🏫</div><h3>ورش وتدريب</h3><p>ورش عمل ولقاءات تدريبية لاستخدام أدوات الذكاء الاصطناعي عملياً. <b>قريباً</b></p></div>
+      <div class="goal"><div class="ic">📜</div><h3>المسار التعليمي</h3><p>فصول تعليمية مبنية على حلقات البرنامج، مع اختبار وشهادة إتمام باسمك. <a href="course.html">ابدأ الفصل الأول</a></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="program">
+  <div class="container program-grid">
+    <div class="program-info">
+      <span class="badge">على أثير إذاعة الرياض 📻</span>
+      <h2 class="sec">برنامج خوارزميات</h2>
+      <p>برنامج إذاعي أسبوعي يُبث عبر إذاعة الرياض، نواكب فيه الثورة المعلوماتية الهائلة وتقنيات الذكاء الاصطناعي: من المفاهيم الأساسية وهندسة الأوامر، إلى صناعة المحتوى والتعليم والأعمال والخصوصية.</p>
+      <p>اكتمل الموسم الأول بواقع <b>32 حلقة</b> تشكل معاً منهجاً متدرجاً لكل من يريد فهم الذكاء الاصطناعي وتوظيفه في حياته.</p>
+      <div class="host">
+        <img class="avatar-photo" src="img/mustafa.jpg" alt="م. مصطفى الشعلة">
+        <div>
+          <b>م. مصطفى الشعلة</b>
+          <small>خبير الذكاء الاصطناعي وعلوم البيانات — ضيف البرنامج الدائم</small>
+        </div>
+      </div>
+    </div>
+    <img src="img/ep01.png" alt="برنامج خوارزميات — الموسم الأول">
+  </div>
+</section>
+
+<section id="season1">
+  <div class="container">
+    <h2 class="sec">حلقات الموسم الأول</h2>
+    <p class="sec-sub">32 حلقة كاملة — اختر أي حلقة وابدأ الاستماع مباشرة.</p>
+
+    <div class="player-box">
+      <div class="now-title" id="nowTitle">اختر حلقة من القائمة 👇</div>
+      <div class="now-tag" id="nowTag"></div>
+      <audio id="player" controls preload="none"></audio>
+    </div>
+
+    <div class="ep-list" id="epList"></div>
+  </div>
+</section>
+
+<footer>
+  <p>AI for All — الذكاء الاصطناعي للجميع | مبادرة شخصية تطوعية</p>
+  <p>م. مصطفى الشعلة © <span id="yr"></span></p>
+</footer>
+
+<script src="episodes.js"></script>
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+const list = document.getElementById('epList');
+const player = document.getElementById('player');
+const nowTitle = document.getElementById('nowTitle');
+const nowTag = document.getElementById('nowTag');
+
+EPISODES.forEach(ep => {
+  const div = document.createElement('div');
+  div.className = 'ep';
+  div.id = 'ep' + ep.n;
+  div.innerHTML = `
+    <div class="num">${ep.n}</div>
+    <div>
+      <h4>${ep.title}</h4>
+      <p>${ep.desc}</p>
+      ${ep.youtube ? `<a class="yt" target="_blank" href="https://www.youtube.com/watch?v=${ep.youtube}">▶ شاهد على يوتيوب</a>` : ''}
+    </div>`;
+  div.addEventListener('click', () => play(ep, div));
+  list.appendChild(div);
+});
+
+function play(ep, div){
+  document.querySelectorAll('.ep.active').forEach(e => e.classList.remove('active'));
+  div.classList.add('active');
+  nowTitle.textContent = 'الحلقة ' + ep.n + ' — ' + ep.title;
+  nowTag.textContent = ep.tagline;
+  player.src = ep.audio;
+  player.play();
+  div.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+// auto-advance to next episode
+player.addEventListener('ended', () => {
+  const cur = document.querySelector('.ep.active');
+  if (!cur) return;
+  const n = parseInt(cur.id.replace('ep','')) + 1;
+  const next = EPISODES.find(e => e.n === n);
+  if (next) play(next, document.getElementById('ep' + n));
+});
+</script>
+</body>
+</html>
