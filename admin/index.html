@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>لوحة التحكم — AI for All</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a1628;--navy2:#11263f;--card:#142e4d;--green:#169b62;--green-l:#3ec98a;--gold:#f0c85a;--txt:#eef4fa;--muted:#b9c8d7;--red:#e2685f}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--txt);line-height:1.7}
+a{color:var(--green-l);text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit;width:100%;padding:11px 14px;border-radius:10px;border:1px solid rgba(62,201,138,.35);background:var(--navy);color:var(--txt);font-size:1rem}
+textarea{min-height:120px;resize:vertical}
+label{display:block;font-weight:700;margin:14px 0 6px;font-size:.95rem}
+.btn{background:var(--green);color:#fff;font-weight:700;border:none;padding:11px 26px;border-radius:30px;font-size:1rem;transition:background .2s}
+.btn:hover{background:var(--green-l);color:var(--navy)}
+.btn.sm{padding:7px 16px;font-size:.88rem}
+.btn.ghost{background:transparent;border:1px solid rgba(62,201,138,.5);color:var(--green-l)}
+.btn.danger{background:transparent;border:1px solid var(--red);color:var(--red)}
+.btn.danger:hover{background:var(--red);color:#fff}
+
+/* Login */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{background:var(--card);border:1px solid rgba(62,201,138,.25);border-radius:18px;padding:36px;width:100%;max-width:400px}
+.login-card h1{font-size:1.5rem;margin-bottom:4px;display:flex;align-items:center;gap:10px;direction:ltr;justify-content:center}
+.login-card p{color:var(--muted);text-align:center;margin-bottom:20px;font-size:.92rem}
+.msg{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.9rem;display:none}
+.msg.err{display:block;background:rgba(226,104,95,.12);border:1px solid var(--red);color:var(--red)}
+.msg.ok{display:block;background:rgba(22,155,98,.14);border:1px solid var(--green-l);color:var(--green-l)}
+
+/* App */
+#app{display:none;min-height:100vh}
+header.bar{position:sticky;top:0;z-index:30;background:rgba(10,22,40,.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(62,201,138,.25);display:flex;align-items:center;justify-content:space-between;padding:14px 24px}
+header.bar .brand{display:flex;align-items:center;gap:10px;font-weight:800;direction:ltr}
+header.bar .who{color:var(--muted);font-size:.88rem}
+.layout{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 61px)}
+nav.side{background:var(--navy2);border-left:1px solid rgba(62,201,138,.18);padding:18px 12px}
+nav.side button{display:block;width:100%;text-align:right;background:transparent;border:none;color:var(--muted);padding:12px 16px;border-radius:10px;font-size:1rem;margin-bottom:4px}
+nav.side button:hover{background:var(--card);color:var(--txt)}
+nav.side button.active{background:var(--green);color:#fff;font-weight:700}
+main{padding:28px 32px;max-width:1000px}
+h2.title{font-size:1.6rem;font-weight:800;margin-bottom:6px}
+.sub{color:var(--muted);margin-bottom:22px}
+.panel{display:none}
+.panel.active{display:block}
+
+.item{background:var(--card);border:1px solid rgba(62,201,138,.18);border-radius:12px;padding:16px 18px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start}
+.item .num{flex-shrink:0;width:42px;height:42px;border-radius:10px;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.item .body{flex:1;min-width:0}
+.item h3{font-size:1.05rem}
+.item p{color:var(--muted);font-size:.9rem;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.item .acts{display:flex;gap:8px;flex-shrink:0}
+.card{background:var(--card);border:1px solid rgba(62,201,138,.2);border-radius:14px;padding:22px;margin-bottom:18px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hide{display:none}
+.spin{color:var(--muted);padding:20px 0}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:12px 26px;border-radius:30px;font-weight:700;z-index:100;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.show{opacity:1}
+.toast.err{background:var(--red)}
+.q-edit{background:var(--navy2);border:1px solid rgba(62,201,138,.2);border-radius:12px;padding:16px;margin-bottom:12px}
+.opt-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.opt-row input[type=radio]{width:auto;accent-color:var(--green)}
+.muted-note{color:var(--muted);font-size:.85rem;margin-top:6px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid rgba(62,201,138,.2);border-radius:14px;padding:18px 20px}
+.stat .v{font-size:2rem;font-weight:800;color:var(--green-l)}
+.stat .k{color:var(--muted);font-size:.9rem;margin-top:2px}
+.chart{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.bar-row{display:grid;grid-template-columns:160px 1fr 44px;align-items:center;gap:10px;font-size:.88rem}
+.bar-row .lbl{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-row .track{background:var(--navy2);border-radius:6px;height:16px;overflow:hidden}
+.bar-row .fill{background:linear-gradient(90deg,var(--green),var(--green-l));height:100%}
+.bar-row .n{color:var(--txt);font-weight:700;text-align:left}
+table.tbl{width:100%;border-collapse:collapse;margin-top:6px}
+table.tbl th{background:var(--navy2);color:var(--green-l);padding:10px 14px;text-align:right;font-size:.9rem}
+table.tbl td{border-bottom:1px solid rgba(62,201,138,.15);padding:10px 14px;color:var(--txt);font-size:.92rem}
+table.tbl tr td:last-child{text-align:left}
+.pill{display:inline-block;padding:2px 12px;border-radius:20px;font-size:.82rem;font-weight:700}
+.pill.pass{background:rgba(22,155,98,.18);color:var(--green-l)}
+.pill.fail{background:rgba(226,104,95,.14);color:var(--red)}
+@media(max-width:760px){.layout{grid-template-columns:1fr}nav.side{display:flex;overflow-x:auto}.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="login">
+  <form class="login-card" id="loginForm">
+    <h1><svg width="30" height="30" viewBox="30 25 115 120"><g stroke="#3ec98a" stroke-width="3" fill="none" opacity=".85"><line x1="85" y1="85" x2="85" y2="33"/><line x1="85" y1="85" x2="130" y2="59"/><line x1="85" y1="85" x2="130" y2="111"/><line x1="85" y1="85" x2="85" y2="137"/><line x1="85" y1="85" x2="40" y2="111"/><line x1="85" y1="85" x2="40" y2="59"/></g><g fill="#169b62"><circle cx="85" cy="85" r="14"/><circle cx="85" cy="33" r="8"/><circle cx="130" cy="59" r="8"/><circle cx="130" cy="111" r="8"/><circle cx="85" cy="137" r="8"/><circle cx="40" cy="111" r="8"/><circle cx="40" cy="59" r="8"/></g></svg> لوحة التحكم</h1>
+    <p>AI for All — الذكاء الاصطناعي للجميع</p>
+    <label for="email">البريد الإلكتروني</label>
+    <input id="email" type="email" autocomplete="username" required>
+    <label for="password">كلمة المرور</label>
+    <input id="password" type="password" autocomplete="current-password" required>
+    <button class="btn" type="submit" style="width:100%;margin-top:20px">دخول</button>
+    <div class="msg" id="loginMsg"></div>
+  </form>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app">
+  <header class="bar">
+    <div class="brand"><svg width="28" height="28" viewBox="30 25 115 120"><g stroke="#3ec98a" stroke-width="3" fill="none" opacity=".85"><line x1="85" y1="85" x2="85" y2="33"/><line x1="85" y1="85" x2="130" y2="59"/><line x1="85" y1="85" x2="130" y2="111"/><line x1="85" y1="85" x2="85" y2="137"/><line x1="85" y1="85" x2="40" y2="111"/><line x1="85" y1="85" x2="40" y2="59"/></g><g fill="#169b62"><circle cx="85" cy="85" r="14"/><circle cx="85" cy="33" r="8"/><circle cx="130" cy="59" r="8"/><circle cx="130" cy="111" r="8"/><circle cx="85" cy="137" r="8"/><circle cx="40" cy="111" r="8"/><circle cx="40" cy="59" r="8"/></g></svg> AI for All</div>
+    <div><span class="who" id="who"></span> &nbsp; <button class="btn ghost sm" id="logout">خروج</button></div>
+  </header>
+
+  <div class="layout">
+    <nav class="side">
+      <button data-panel="episodes" class="active">🎙️ الحلقات والمواسم</button>
+      <button data-panel="course">📜 الفصل التعليمي</button>
+      <button data-panel="quiz">📝 الاختبار</button>
+      <button data-panel="stats">📊 الإحصائيات</button>
+      <button data-panel="results">👥 نتائج الزوّار</button>
+    </nav>
+
+    <main>
+      <!-- EPISODES -->
+      <section class="panel active" id="panel-episodes">
+        <h2 class="title">الحلقات والمواسم</h2>
+        <p class="sub">أضف موسماً، ثم أضف الحلقات. الصورة المصغّرة تُولَّد تلقائياً.</p>
+        <div class="card">
+          <label for="seasonSel">الموسم الحالي</label>
+          <div style="display:flex;gap:10px;align-items:center">
+            <select id="seasonSel" style="flex:1"></select>
+            <button class="btn ghost sm" id="addSeasonBtn">+ موسم جديد</button>
+          </div>
+        </div>
+        <button class="btn" id="newEpBtn">+ حلقة جديدة</button>
+        <div id="epForm" class="card hide" style="margin-top:16px"></div>
+        <div id="epList" style="margin-top:18px"><div class="spin">…</div></div>
+      </section>
+
+      <!-- COURSE -->
+      <section class="panel" id="panel-course">
+        <h2 class="title">الفصل التعليمي</h2>
+        <p class="sub">حرّر نص الفصل (يدعم HTML بسيط: عناوين h2، فقرات p، قوائم).</p>
+        <div id="courseList"><div class="spin">…</div></div>
+      </section>
+
+      <!-- QUIZ -->
+      <section class="panel" id="panel-quiz">
+        <h2 class="title">الاختبار</h2>
+        <p class="sub">عدّل الأسئلة والخيارات، وحدّد الإجابة الصحيحة لكل سؤال.</p>
+        <div id="quizArea"><div class="spin">…</div></div>
+      </section>
+
+      <!-- STATS -->
+      <section class="panel" id="panel-stats">
+        <h2 class="title">الإحصائيات</h2>
+        <p class="sub">عدد الزوّار، مرات الاستماع، إجمالي وقت الاستماع، والمزيد.</p>
+        <div id="statCards" class="stat-grid"></div>
+        <div class="card">
+          <h3 style="margin-bottom:6px">أكثر الحلقات استماعاً</h3>
+          <div id="playsChart" class="chart"></div>
+        </div>
+        <button class="btn ghost sm" id="refreshStats">↻ تحديث</button>
+      </section>
+
+      <!-- RESULTS -->
+      <section class="panel" id="panel-results">
+        <h2 class="title">نتائج الزوّار</h2>
+        <p class="sub">قائمة من اختبر معرفته في الفصل التعليمي.</p>
+        <div id="resultsArea"><div class="spin">…</div></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<canvas id="thumbCanvas" width="1280" height="720" style="display:none"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../shared/supabase-config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

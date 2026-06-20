@@ -164,10 +164,13 @@ footer{background:#08121f;padding:32px 0;text-align:center;color:var(--muted);fo
   <p>م. مصطفى الشعلة © <span id="yr"></span></p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="shared/supabase-config.js"></script>
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
 
-const QUESTIONS = [
+let COURSE_ID = null, sbC = null;
+let QUESTIONS = [
   {q:"ما أبسط تعريف للذكاء الاصطناعي؟", o:["برمجة مواقع الإنترنت","محاكاة تفكير الإنسان بواسطة الحاسوب","تخزين البيانات في السحابة","صناعة أجهزة الحاسوب"], a:1},
   {q:"متى بدأ مفهوم الذكاء الاصطناعي؟", o:["في التسعينات","مع إطلاق الهواتف الذكية","في خمسينات القرن الماضي","عام 2022"], a:2},
   {q:"ما الفارق الجوهري الذي يميز الذكاء الاصطناعي التوليدي؟", o:["أنه أسرع في الحسابات","أنه يبتكر محتوى جديداً","أنه لا يحتاج كهرباء","أنه يعمل بدون بيانات"], a:1},
@@ -179,17 +182,44 @@ const QUESTIONS = [
   {q:"ما التقنية التي تعالج الهلوسة بربط النموذج بمصادر موثوقة؟", o:["USB","RAM","RAG","GPS"], a:2},
   {q:"ما القاعدة الذهبية قبل مشاركة بياناتك مع مساعد ذكي؟", o:["مشاركة كل شيء لتحسين النتائج","تصنيف البيانات وعدم مشاركة الحساس منها","استخدام أسماء مستعارة فقط","إغلاق الجهاز بعد الاستخدام"], a:1},
 ];
-const PASS = 7;
+let PASS = 7;
 
 const qWrap = document.getElementById('questions');
-QUESTIONS.forEach((item, i) => {
-  const div = document.createElement('div');
-  div.className = 'q'; div.id = 'q' + i;
-  div.innerHTML = '<h3>' + (i+1) + '. ' + item.q + '</h3>' +
-    item.o.map((opt, j) =>
-      `<label><input type="radio" name="q${i}" value="${j}">${opt}</label>`).join('');
-  qWrap.appendChild(div);
-});
+function buildQuestions(){
+  qWrap.innerHTML = '';
+  QUESTIONS.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'q'; div.id = 'q' + i;
+    div.innerHTML = '<h3>' + (i+1) + '. ' + item.q + '</h3>' +
+      item.o.map((opt, j) =>
+        `<label><input type="radio" name="q${i}" value="${j}">${opt}</label>`).join('');
+    qWrap.appendChild(div);
+  });
+}
+buildQuestions();
+
+// If Supabase is configured, load the latest course text + quiz from it.
+async function loadCourseFromSupabase(){
+  if (!window.SUPABASE_READY) return;
+  try {
+    sbC = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    const { data: courses } = await sbC.from('courses').select('id,body_html,pass_score').order('sort_order').limit(1);
+    if (courses && courses.length){
+      COURSE_ID = courses[0].id;
+      PASS = courses[0].pass_score || PASS;
+      if (courses[0].body_html){
+        const art = document.querySelector('article .container');
+        if (art) art.innerHTML = courses[0].body_html;
+      }
+      const { data: qs } = await sbC.from('quiz_questions').select('question,options,answer_index').eq('course_id', COURSE_ID).order('sort_order');
+      if (qs && qs.length){
+        QUESTIONS = qs.map(q => ({ q: q.question, o: Array.isArray(q.options) ? q.options : JSON.parse(q.options), a: q.answer_index }));
+        buildQuestions();
+      }
+    }
+  } catch(_) { /* keep static content */ }
+}
+loadCourseFromSupabase();
 
 document.getElementById('submitBtn').addEventListener('click', async () => {
   const name = document.getElementById('studentName').value.trim();
@@ -208,7 +238,14 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
     el.className = 'q ' + (ok ? 'correct' : 'wrong');
     if (ok) score++;
   });
-  if (score >= PASS) {
+  const passed = score >= PASS;
+  // record the attempt (name, score, pass/fail) if the backend is connected
+  if (sbC) {
+    sbC.from('exam_results').insert({
+      course_id: COURSE_ID, name, score, total: QUESTIONS.length, passed
+    }).then(()=>{}, ()=>{});
+  }
+  if (passed) {
     resultBox.className = 'result pass';
     resultBox.textContent = `ممتاز يا ${name}! نتيجتك ${score} من ${QUESTIONS.length} — تم إنشاء شهادتك بالأسفل.`;
     await drawCertificate(name, score);

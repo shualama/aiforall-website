@@ -180,6 +180,8 @@ footer img{height:60px;border-radius:10px;background:#fff;padding:4px}
   <p>م. مصطفى الشعلة © <span id="yr"></span></p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="shared/supabase-config.js"></script>
 <script src="episodes.js"></script>
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
@@ -187,38 +189,84 @@ const list = document.getElementById('epList');
 const player = document.getElementById('player');
 const nowTitle = document.getElementById('nowTitle');
 const nowTag = document.getElementById('nowTag');
+let SESSION = 's-' + Math.random().toString(36).slice(2);
+let sb = null;
 
-EPISODES.forEach(ep => {
-  const div = document.createElement('div');
-  div.className = 'ep';
-  div.id = 'ep' + ep.n;
-  div.innerHTML = `
-    <div class="num">${ep.n}</div>
-    <div>
-      <h4>${ep.title}</h4>
-      <p>${ep.desc}</p>
-      ${ep.youtube ? `<a class="yt" target="_blank" href="https://www.youtube.com/watch?v=${ep.youtube}">▶ شاهد على يوتيوب</a>` : ''}
-    </div>`;
-  div.addEventListener('click', () => play(ep, div));
-  list.appendChild(div);
-});
+function renderEpisodes(eps){
+  list.innerHTML = '';
+  eps.forEach(ep => {
+    const div = document.createElement('div');
+    div.className = 'ep';
+    div.id = 'ep' + ep.n;
+    div.dataset.eid = ep.id || '';
+    div.innerHTML = `
+      <div class="num">${ep.n}</div>
+      <div>
+        <h4>${ep.title}</h4>
+        <p>${ep.desc}</p>
+        ${ep.youtube ? `<a class="yt" target="_blank" href="https://www.youtube.com/watch?v=${ep.youtube}">▶ شاهد على يوتيوب</a>` : ''}
+      </div>`;
+    div.addEventListener('click', () => play(ep, div));
+    list.appendChild(div);
+  });
+}
 
+// Default: static episodes. If Supabase is configured, load live content.
+let CURRENT = EPISODES.slice();
+renderEpisodes(CURRENT);
+
+async function loadFromSupabase(){
+  if (!window.SUPABASE_READY) return;
+  try {
+    sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    const { data, error } = await sb
+      .from('episodes')
+      .select('id,number,title,tagline,description,audio_url,youtube_id, seasons(number)')
+      .order('number');
+    if (error || !data || !data.length) return; // keep static fallback
+    CURRENT = data.map(e => ({
+      id: e.id, n: e.number, title: e.title, tagline: e.tagline || '',
+      desc: e.description || '', audio: e.audio_url || ('audio/ep' + String(e.number).padStart(2,'0') + '.mp3'),
+      youtube: e.youtube_id || ''
+    }));
+    renderEpisodes(CURRENT);
+    logEvent('visit', null);
+  } catch(_) { /* stay on static */ }
+}
+function logEvent(type, episodeId, seconds){
+  if (!sb) return;
+  sb.from('events').insert({ type, episode_id: episodeId || null, seconds: seconds || null, session_id: SESSION }).then(()=>{}, ()=>{});
+}
+loadFromSupabase();
+
+let lastLoggedSec = 0;
 function play(ep, div){
   document.querySelectorAll('.ep.active').forEach(e => e.classList.remove('active'));
   div.classList.add('active');
   nowTitle.textContent = 'الحلقة ' + ep.n + ' — ' + ep.title;
   nowTag.textContent = ep.tagline;
   player.src = ep.audio;
+  player.dataset.eid = ep.id || '';
+  lastLoggedSec = 0;
   player.play();
+  logEvent('play_start', ep.id);
   div.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
+
+// log listened time in ~30s increments
+player.addEventListener('timeupdate', () => {
+  if (player.currentTime - lastLoggedSec >= 30){
+    logEvent('play_progress', player.dataset.eid, 30);
+    lastLoggedSec = player.currentTime;
+  }
+});
 
 // auto-advance to next episode
 player.addEventListener('ended', () => {
   const cur = document.querySelector('.ep.active');
   if (!cur) return;
   const n = parseInt(cur.id.replace('ep','')) + 1;
-  const next = EPISODES.find(e => e.n === n);
+  const next = CURRENT.find(e => e.n === n);
   if (next) play(next, document.getElementById('ep' + n));
 });
 </script>
