@@ -85,7 +85,7 @@ footer{background:#08121f;padding:32px 0;text-align:center;color:var(--muted);fo
       <li><a href="index.html">الرئيسية</a></li>
       <li><a href="index.html#season1">المستوى الأول</a></li>
       <li><a href="level2.html" class="active">المستوى الثاني</a></li>
-      <li><a href="course.html">📜 اختبار المستوى الأول</a></li>
+      <li><a href="course2.html">📜 المسار التعليمي</a></li>
     </ul>
   </div>
 </nav>
@@ -109,6 +109,8 @@ footer{background:#08121f;padding:32px 0;text-align:center;color:var(--muted);fo
         <button class="btn ghost" id="listenCertBtn" disabled>🎧 شهادة إتمام الاستماع</button>
       </div>
       <div class="ptrack"><div class="pfill" id="pfill"></div></div>
+      <input id="listenerName" type="text" placeholder="اسمك (ليظهر في شهادة الاستماع)" autocomplete="name"
+        style="margin-top:14px;width:100%;max-width:420px;padding:10px 14px;border-radius:10px;border:1px solid rgba(62,201,138,.4);background:var(--navy);color:var(--txt);font-family:inherit">
     </div>
 
     <div class="player-box">
@@ -121,26 +123,11 @@ footer{background:#08121f;padding:32px 0;text-align:center;color:var(--muted);fo
   </div>
 </section>
 
-<section id="quiz">
+<section id="quiz" style="background:var(--navy2);text-align:center">
   <div class="container">
-    <h2 class="sec">اختبار المستوى الثاني</h2>
-    <p class="sec-sub">10 أسئلة عن وكلاء الذكاء الاصطناعي — النجاح من 7 فأكثر. أدخل اسمك كما تريده في الشهادة.</p>
-    <div class="namebox">
-      <label for="studentName">الاسم الكامل</label>
-      <input id="studentName" type="text" placeholder="مثال: نورة بنت أحمد القحطاني" autocomplete="name">
-    </div>
-    <div id="questions"></div>
-    <button class="btn" id="submitBtn">تصحيح الاختبار</button>
-    <div class="result" id="resultBox"></div>
-  </div>
-</section>
-
-<section class="certwrap" id="quizCert">
-  <div class="container">
-    <h2 class="sec">🎉 شهادة اجتياز الاختبار</h2>
-    <p class="sec-sub">يمكنك تنزيلها ومشاركتها.</p>
-    <canvas class="cert" id="quizCanvas" width="1600" height="1131"></canvas>
-    <div style="margin-top:18px"><button class="btn" id="dlQuiz">⬇ تنزيل الشهادة</button></div>
+    <h2 class="sec" style="display:inline-block">اختبر معرفتك واحصل على شهادة 📝</h2>
+    <p class="sec-sub">بعد الاستماع، انتقل إلى اختبار «الموسم الثاني» في المسار التعليمي — عشرة أسئلة وشهادة اجتياز باسمك.</p>
+    <a class="btn" href="course2.html#exam">اذهب إلى اختبار الموسم الثاني ←</a>
   </div>
 </section>
 
@@ -230,8 +217,9 @@ renderList();
 
 // ---------- listening certificate ----------
 document.getElementById('listenCertBtn').addEventListener('click',async()=>{
-  const name=(document.getElementById('studentName').value.trim())||prompt('اكتب اسمك ليظهر في الشهادة:');
-  if(!name) return;
+  const el=document.getElementById('listenerName');
+  const name=(el&&el.value.trim())||prompt('اكتب اسمك ليظهر في الشهادة:');
+  if(!name){ if(el)el.focus(); return; }
   await drawCertificate(document.getElementById('listenCanvas'),{
     kind:'listen', name,
     line1:'لإتمامه الاستماع إلى كامل حلقات المستوى الثاني',
@@ -241,55 +229,6 @@ document.getElementById('listenCertBtn').addEventListener('click',async()=>{
   document.getElementById('listenCert').scrollIntoView({behavior:'smooth'});
 });
 document.getElementById('dlListen').addEventListener('click',()=>downloadCanvas('listenCanvas','AIforAll-Listening-L2.png'));
-
-// ---------- quiz ----------
-const QUESTIONS=[
-  {q:"ما الفكرة الجوهرية التي يقوم عليها «وكيل الذكاء الاصطناعي» (AI Agent)؟", o:["يجيب عن الأسئلة فقط","يخزّن الملفات","ينفّذ المهام بشكل مستقل لا مجرد الإجابة","يصمّم الشعارات"], a:2},
-  {q:"بماذا وُصف تحوّل الذكاء الاصطناعي في هذا الموسم؟", o:["من المساعد المجيب إلى الموظف الرقمي المنفّذ","من الحاسوب إلى الجوال","من النص إلى الصورة","من الإنترنت إلى دون إنترنت"], a:0},
-  {q:"حين نقول «هل نودّع الشات بوت؟» فالمقصود أنّ:", o:["الشات بوت انتهى تماماً","الذكاء الاصطناعي فشل","لا جديد يُذكر","المرحلة تطوّرت نحو وكلاء ينفّذون المهام"], a:3},
-  {q:"ما المقصود بـ«عصر الخداع الذكي»؟", o:["ألعاب الذكاء","أنّ أدوات الاحتيال صارت أكثر إقناعاً بفضل الذكاء الاصطناعي","خداع بصري في التصاميم","تسريع الحواسيب"], a:1},
-  {q:"موضوع الحلقات حول أدوات أتمتة الأعمال يجيب عن سؤال:", o:["كم سعر الأداة فقط","لون واجهة الأداة","أيّ أداة أستخدم ومتى","اسم مطوّر الأداة"], a:2},
-  {q:"ما الحدث التقني الذي خُصّصت له حلقة في هذا الموسم؟", o:["مؤتمر Google I/O 2026","كأس العالم","معرض الكتاب","سباق فورمولا"], a:0},
-  {q:"ما حدود الاعتماد على الذكاء الاصطناعي في بناء النماذج الأولية؟", o:["لا حدود إطلاقاً","لا يصلح لأي نموذج","يعمل دون أوامر","يبني نماذج بسرعة لكنه يحتاج مراجعة الإنسان"], a:3},
-  {q:"بأي أداة جرت التجربة العملية لبناء موقع المبادرة؟", o:["الرسام","Claude Code","الآلة الحاسبة","برنامج عروض"], a:1},
-  {q:"ما الجديد في تقديم الموسم الثاني من البرنامج؟", o:["بثّ مرئي فقط","حلقات بلا ضيف","مذيع افتراضي بالذكاء الاصطناعي","لغة إنجليزية"], a:2},
-  {q:"الهدف من تحويل الحلقات الصوتية إلى منتج رقمي متكامل هو:", o:["إتاحة محصول تعليمي مفيد لمن لم يحضر الحلقات","تقليل عدد المستمعين","إخفاء المحتوى","بيع الأجهزة"], a:0},
-];
-const PASS=7;
-const qWrap=document.getElementById('questions');
-QUESTIONS.forEach((item,i)=>{
-  const div=document.createElement('div'); div.className='q'; div.id='q'+i;
-  div.innerHTML='<h3>'+(i+1)+'. '+item.q+'</h3>'+item.o.map((opt,j)=>`<label><input type="radio" name="q${i}" value="${j}">${opt}</label>`).join('');
-  qWrap.appendChild(div);
-});
-document.getElementById('submitBtn').addEventListener('click',async()=>{
-  const name=document.getElementById('studentName').value.trim();
-  const box=document.getElementById('resultBox');
-  if(!name){box.className='result fail';box.textContent='فضلاً أدخل اسمك أولاً ليظهر في الشهادة.';document.getElementById('studentName').focus();return;}
-  let score=0;
-  QUESTIONS.forEach((item,i)=>{
-    const el=document.getElementById('q'+i);
-    const ch=document.querySelector(`input[name="q${i}"]:checked`);
-    const ok=ch&&parseInt(ch.value)===item.a;
-    el.className='q '+(ok?'correct':'wrong'); if(ok)score++;
-  });
-  if(score>=PASS){
-    box.className='result pass';
-    box.textContent=`ممتاز يا ${name}! نتيجتك ${score} من ${QUESTIONS.length} — شهادتك جاهزة بالأسفل.`;
-    await drawCertificate(document.getElementById('quizCanvas'),{
-      kind:'quiz', name, score, total:QUESTIONS.length,
-      line1:'لاجتيازه بنجاح اختبار «المستوى الثاني: وكلاء الذكاء الاصطناعي»',
-      line2:'ضمن المسار التعليمي المبني على حلقات برنامج خوارزميات'
-    });
-    document.getElementById('quizCert').style.display='block';
-    document.getElementById('quizCert').scrollIntoView({behavior:'smooth'});
-  }else{
-    box.className='result fail';
-    box.textContent=`نتيجتك ${score} من ${QUESTIONS.length}. تحتاج ${PASS} إجابات صحيحة — راجع الحلقات وأعد المحاولة، الأخطاء محددة بالأحمر.`;
-    document.getElementById('quizCert').style.display='none';
-  }
-});
-document.getElementById('dlQuiz').addEventListener('click',()=>downloadCanvas('quizCanvas','AIforAll-Certificate-L2.png'));
 </script>
 </body>
 </html>

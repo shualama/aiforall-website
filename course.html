@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الفصل الأول: أساسيات الذكاء الاصطناعي — AI for All</title>
+<title>الموسم الأول: أساسيات الذكاء الاصطناعي — AI for All</title>
 <meta name="description" content="فصل تعليمي مبني على محتوى الموسم الأول من برنامج خوارزميات، مع اختبار وشهادة إتمام.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,6 +73,11 @@ h2.sec::after{content:"";display:block;width:64px;height:4px;background:var(--gr
 .cert-actions{margin-top:20px;display:flex;gap:14px;flex-wrap:wrap}
 
 footer{background:#08121f;padding:32px 0;text-align:center;color:var(--muted);font-size:.95rem}
+.seasons-switch{display:flex;gap:10px;justify-content:center;margin-top:22px}
+.season-pill{padding:8px 22px;border-radius:30px;border:1px solid rgba(62,201,138,.4);color:var(--muted);font-weight:700;font-size:.95rem}
+.season-pill.active{background:var(--green);color:#fff;border-color:var(--green)}
+.season-pill:hover{color:var(--green-l)}
+.season-pill.active:hover{color:#fff}
 </style>
 </head>
 <body>
@@ -88,8 +93,12 @@ footer{background:#08121f;padding:32px 0;text-align:center;color:var(--muted);fo
 <header class="course">
   <div class="container">
     <span class="kicker">المسار التعليمي — مبني على حلقات برنامج خوارزميات</span>
-    <h1>الفصل الأول: أساسيات الذكاء الاصطناعي</h1>
-    <p>اقرأ الفصل، ثم اختبر فهمك بعشرة أسئلة. عند الإجابة على 7 أسئلة صحيحة أو أكثر تحصل على شهادة إتمام باسمك.</p>
+    <h1>الموسم الأول: أساسيات الذكاء الاصطناعي</h1>
+    <p>اقرأ الملخّص، ثم اختبر فهمك بعشرة أسئلة. عند الإجابة على 7 أسئلة صحيحة أو أكثر تحصل على شهادة إتمام باسمك.</p>
+    <div class="seasons-switch">
+      <a class="season-pill active" href="course.html">الموسم الأول</a>
+      <a class="season-pill" href="course2.html">الموسم الثاني 🤖</a>
+    </div>
   </div>
 </header>
 
@@ -136,7 +145,7 @@ footer{background:#08121f;padding:32px 0;text-align:center;color:var(--muted);fo
 
 <section id="exam">
   <div class="container">
-    <h2 class="sec">اختبار الفصل الأول</h2>
+    <h2 class="sec">اختبار الموسم الأول</h2>
     <p class="sec-sub">10 أسئلة — النجاح من 7 إجابات صحيحة فأكثر. أدخل اسمك كما تريد أن يظهر في الشهادة.</p>
     <div class="namebox">
       <label for="studentName">الاسم الكامل</label>
@@ -203,7 +212,7 @@ async function loadCourseFromSupabase(){
   if (!window.SUPABASE_READY) return;
   try {
     sbC = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-    const { data: courses } = await sbC.from('courses').select('id,body_html,pass_score').order('sort_order').limit(1);
+    const { data: courses } = await sbC.from('courses').select('id,body_html,pass_score').eq('slug','ai-basics-1').limit(1);
     if (courses && courses.length){
       COURSE_ID = courses[0].id;
       PASS = courses[0].pass_score || PASS;
@@ -320,7 +329,7 @@ async function drawCertificate(name, score) {
   ctx.beginPath(); ctx.moveTo(W/2 - nw/2, 672); ctx.lineTo(W/2 + nw/2, 672); ctx.stroke();
 
   ctx.fillStyle = '#dbe6f1'; ctx.font = '500 36px Tajawal';
-  ctx.fillText('لإتمامه بنجاح «الفصل الأول: أساسيات الذكاء الاصطناعي»', W/2, 745);
+  ctx.fillText('لإتمامه بنجاح «الموسم الأول: أساسيات الذكاء الاصطناعي»', W/2, 745);
   ctx.fillStyle = '#3ec98a'; ctx.font = '500 30px Tajawal';
   ctx.fillText('ضمن المسار التعليمي المبني على حلقات برنامج خوارزميات', W/2, 795);
 

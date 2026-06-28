@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الموسم الثاني: وكلاء الذكاء الاصطناعي — AI for All</title>
+<meta name="description" content="ملخّص المستوى الثاني من خوارزميات: وكلاء الذكاء الاصطناعي (AI Agents)، مع اختبار وشهادة إتمام.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a1628;--navy2:#11263f;--card:#142e4d;--green:#169b62;--green-l:#3ec98a;--gold:#f0c85a;--txt:#eef4fa;--muted:#b9c8d7;--red:#e2685f}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--txt);line-height:2}
+a{color:var(--green-l);text-decoration:none}
+.container{max-width:880px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;z-index:50;background:rgba(10,22,40,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(62,201,138,.25)}
+nav .container{display:flex;align-items:center;justify-content:space-between;height:64px;max-width:1100px}
+.brand{display:flex;direction:ltr;align-items:center;gap:10px;font-weight:800;font-size:1.2rem;color:var(--txt)}
+.brand span{color:var(--green-l)}
+nav a.back{color:var(--muted);font-weight:500}
+nav a.back:hover{color:var(--green-l)}
+header.course{padding:64px 0 40px;text-align:center;background:radial-gradient(ellipse at 80% 110%, rgba(22,155,98,.22), transparent 55%), linear-gradient(180deg,var(--navy),var(--navy2))}
+.kicker{display:inline-block;background:rgba(22,155,98,.18);color:var(--green-l);border:1px solid rgba(62,201,138,.4);padding:4px 18px;border-radius:30px;font-size:.92rem;font-weight:500;margin-bottom:16px}
+header.course h1{font-size:clamp(1.8rem,5vw,2.7rem);font-weight:800}
+header.course p{color:var(--muted);max-width:640px;margin:14px auto 0}
+.seasons-switch{display:flex;gap:10px;justify-content:center;margin-top:22px}
+.season-pill{padding:8px 22px;border-radius:30px;border:1px solid rgba(62,201,138,.4);color:var(--muted);font-weight:700;font-size:.95rem}
+.season-pill.active{background:var(--green);color:#fff;border-color:var(--green)}
+.season-pill:hover{color:var(--green-l)}.season-pill.active:hover{color:#fff}
+article{padding:48px 0}
+article h2{color:var(--green-l);font-size:1.45rem;font-weight:800;margin:40px 0 12px}
+article h2:first-child{margin-top:0}
+article p{margin-bottom:16px;color:#dbe6f1}
+article .term{color:var(--gold);font-weight:700}
+.tipbox{background:var(--card);border-right:4px solid var(--green);border-radius:12px;padding:18px 22px;margin:22px 0;color:var(--muted)}
+.tipbox b{color:var(--green-l)}
+ul.pts{margin:0 22px 16px 0;color:#dbe6f1}
+ul.pts li{margin-bottom:8px}
+#exam{padding:56px 0;background:var(--navy2)}
+#exam h2.sec{font-size:1.9rem;font-weight:800}
+h2.sec::after{content:"";display:block;width:64px;height:4px;background:var(--green);border-radius:4px;margin-top:10px}
+.sec-sub{color:var(--muted);margin:14px 0 30px}
+.namebox{background:var(--card);border:1px solid rgba(62,201,138,.3);border-radius:14px;padding:22px;margin-bottom:28px}
+.namebox label{font-weight:700;display:block;margin-bottom:10px}
+.namebox input{width:100%;max-width:440px;padding:12px 16px;border-radius:10px;border:1px solid rgba(62,201,138,.4);background:var(--navy);color:var(--txt);font-family:inherit;font-size:1.05rem}
+.q{background:var(--card);border-radius:14px;padding:20px 22px;margin-bottom:18px;border:1px solid transparent}
+.q h3{font-size:1.08rem;margin-bottom:12px}
+.q label{display:block;padding:9px 14px;border-radius:10px;cursor:pointer;color:var(--muted)}
+.q label:hover{background:rgba(62,201,138,.1)}
+.q input{margin-left:10px;accent-color:var(--green)}
+.q.correct{border-color:var(--green-l)}.q.wrong{border-color:var(--red)}
+.btn{display:inline-block;background:var(--green);color:#fff;font-weight:700;border:none;cursor:pointer;padding:13px 44px;border-radius:40px;font-size:1.08rem;font-family:inherit;transition:background .2s}
+.btn:hover{background:var(--green-l);color:var(--navy)}
+.result{margin-top:24px;padding:20px 24px;border-radius:14px;font-weight:700;display:none}
+.result.pass{display:block;background:rgba(22,155,98,.16);border:1px solid var(--green-l);color:var(--green-l)}
+.result.fail{display:block;background:rgba(226,104,95,.12);border:1px solid var(--red);color:var(--red)}
+#certificate{padding:56px 0;display:none}
+canvas.cert{width:100%;max-width:880px;border-radius:14px;border:1px solid rgba(62,201,138,.35);box-shadow:0 18px 60px rgba(0,0,0,.45)}
+footer{background:#08121f;padding:32px 0;text-align:center;color:var(--muted);font-size:.95rem}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="brand"><svg width="34" height="34" viewBox="30 25 115 120"><g stroke="#3ec98a" stroke-width="3" fill="none" opacity=".85"><line x1="85" y1="85" x2="85" y2="33"/><line x1="85" y1="85" x2="130" y2="59"/><line x1="85" y1="85" x2="130" y2="111"/><line x1="85" y1="85" x2="85" y2="137"/><line x1="85" y1="85" x2="40" y2="111"/><line x1="85" y1="85" x2="40" y2="59"/></g><g fill="#169b62"><circle cx="85" cy="85" r="14"/><circle cx="85" cy="33" r="8"/><circle cx="130" cy="59" r="8"/><circle cx="130" cy="111" r="8"/><circle cx="85" cy="137" r="8"/><circle cx="40" cy="111" r="8"/><circle cx="40" cy="59" r="8"/></g></svg>
+      AI for <span>All</span></div>
+    <a class="back" href="index.html">→ العودة للرئيسية</a>
+  </div>
+</nav>
+
+<header class="course">
+  <div class="container">
+    <span class="kicker">المسار التعليمي — مبني على حلقات برنامج خوارزميات</span>
+    <h1>الموسم الثاني: وكلاء الذكاء الاصطناعي</h1>
+    <p>اقرأ الملخّص، ثم اختبر فهمك بعشرة أسئلة. عند الإجابة على 7 أسئلة صحيحة أو أكثر تحصل على شهادة إتمام باسمك. وللاستماع إلى الحلقات، زر <a href="level2.html">صفحة المستوى الثاني</a>.</p>
+    <div class="seasons-switch">
+      <a class="season-pill" href="course.html">الموسم الأول</a>
+      <a class="season-pill active" href="course2.html">الموسم الثاني 🤖</a>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="container">
+    <h2>١. ما هو «وكيل الذكاء الاصطناعي»؟</h2>
+    <p>في المستوى الأول تعرّفنا على الذكاء الاصطناعي الذي <span class="term">يجيب</span> عن أسئلتنا. أما المستوى الثاني فمحوره نقلة جديدة: <span class="term">الوكيل الذكي</span> (AI Agent) — نظام لا يكتفي بالإجابة، بل <span class="term">ينفّذ المهام</span> بشكل مستقل نيابةً عنك: يبحث، ويخطّط، ويستخدم أدوات، ويتابع خطوات متسلسلة حتى يُنجز الهدف. باختصار: انتقلنا من «المساعد المجيب» إلى «الموظف الرقمي المنفّذ».</p>
+
+    <h2>٢. OpenClaw.. الانتقال من المساعد إلى الوكيل</h2>
+    <p>منصة <span class="term">OpenClaw</span> مثال بارز على هذا التحوّل: فبدل أن تسألها فتجيب، تكلّفها بمهمة فتذهب وتنفّذها. والبداية معها عملية وعلى مراحل بسيطة تتدرّج من تجربة مهام صغيرة إلى ربطها بأدواتك وملفاتك. الفكرة الجوهرية أن تتعامل مع النموذج بوصفه «منفّذاً» لا «مستشاراً» فقط.</p>
+
+    <h2>٣. هل نودّع الشات بوت؟ عصر الموظف الرقمي</h2>
+    <p>لا، الشات بوت لم ينتهِ — لكن المرحلة <span class="term">تطوّرت</span>. الشات بوت يجيب، والوكيل يُنجز. ومع الوقت يصبح لدينا «موظف رقمي» يعمل على مدار الساعة في مهام متكررة: خدمة العملاء، تنظيم البيانات، متابعة الطلبات. ويبقى الإنسان موجِّهاً ومراجِعاً لا منفّذاً للتفاصيل.</p>
+
+    <h2>٤. أدوات أتمتة الأعمال.. أيّها ومتى؟</h2>
+    <p>تتزايد أدوات أتمتة الأعمال المعتمدة على الوكلاء. والسؤال الأهم ليس «ما الأداة الأقوى؟» بل <span class="term">أيّ أداة أستخدم ومتى</span>، وهل هي جاهزة فعلاً للعمل اليومي. القاعدة: ابدأ بمهمة واضحة ومتكررة، جرّب الأداة عليها بنطاق محدود، ثم وسّع التطبيق تدريجياً.</p>
+
+    <h2>٥. عصر الخداع الذكي</h2>
+    <p>كما يخدم الذكاء الاصطناعي المنتجين، يخدم المحتالين أيضاً. لم تعد رسائل الاحتيال بدائيةً مليئة بالأخطاء؛ صارت <span class="term">مقنعة ومتقنة</span> (تقليد أصوات، رسائل شخصية، مواقع مزيّفة). الوعي هو خط الدفاع الأول: تحقّق من المصدر، ولا تشارك بياناتك الحساسة، وتعامل مع العروض «المغرية جداً» بحذر.</p>
+    <div class="tipbox"><b>قاعدة عملية:</b> أي رسالة تطلب بياناتك أو تخبرك بفوزٍ مفاجئ — توقّف وتحقّق من القناة الرسمية مباشرة قبل أن تتفاعل.</div>
+
+    <h2>٦. مستجدّات الميدان: Google I/O 2026</h2>
+    <p>تابعنا أبرز ما أعلنته جوجل في مؤتمر <span class="term">Google I/O 2026</span> وأثره على اتجاه الذكاء الاصطناعي القادم في حياتنا اليومية، باعتباره مؤشراً على سرعة تطوّر الأدوات التي نتحدث عنها.</p>
+
+    <h2>٧. بناء المنتجات بالذكاء الاصطناعي</h2>
+    <p>أصبح بإمكان الذكاء الاصطناعي بناء <span class="term">نماذج أولية</span> بسرعة: صفحة، تصميم، لوحة بيانات. لكن لهذا حدوداً — فالنماذج تحتاج مراجعة الإنسان وضبطه. وفي تجربة عملية حيّة بنينا موقع هذه المبادرة نفسها باستخدام <span class="term">Claude Code</span>، وحوّلنا حلقات صوتية إلى منتج رقمي تعليمي متكامل — دليلٌ على أن بناء المنتجات الرقمية صار في متناول الجميع.</p>
+
+    <h2>خلاصة المستوى الثاني</h2>
+    <ul class="pts">
+      <li>الوكيل الذكي ينفّذ المهام لا مجرد الإجابة — نقلة من «المساعد» إلى «الموظف الرقمي».</li>
+      <li>منصات مثل OpenClaw تجعل هذا التنفيذ عملياً وعلى مراحل.</li>
+      <li>اختر أداة الأتمتة بحسب المهمة والتوقيت، وابدأ بنطاق محدود.</li>
+      <li>الخداع صار أذكى — والوعي والتحقّق هما الحماية.</li>
+      <li>الذكاء الاصطناعي يبني المنتجات بسرعة، مع بقاء مراجعة الإنسان ضرورية.</li>
+    </ul>
+  </div>
+</article>
+
+<section id="exam">
+  <div class="container">
+    <h2 class="sec">اختبار الموسم الثاني</h2>
+    <p class="sec-sub">10 أسئلة — النجاح من 7 إجابات صحيحة فأكثر. أدخل اسمك كما تريد أن يظهر في الشهادة.</p>
+    <div class="namebox">
+      <label for="studentName">الاسم الكامل</label>
+      <input id="studentName" type="text" placeholder="مثال: نورة بنت أحمد القحطاني" autocomplete="name">
+    </div>
+    <div id="questions"></div>
+    <button class="btn" id="submitBtn">تصحيح الاختبار</button>
+    <div class="result" id="resultBox"></div>
+  </div>
+</section>
+
+<section id="certificate">
+  <div class="container">
+    <h2 class="sec">🎉 شهادتك جاهزة</h2>
+    <p class="sec-sub">يمكنك تنزيلها ومشاركتها.</p>
+    <canvas class="cert" id="certCanvas" width="1600" height="1131"></canvas>
+    <div style="margin-top:20px"><button class="btn" id="downloadBtn">⬇ تنزيل الشهادة (PNG)</button></div>
+  </div>
+</section>
+
+<footer>
+  <p>AI for All — الذكاء الاصطناعي للجميع | مبادرة شخصية تطوعية</p>
+  <p>م. مصطفى الشعلة © <span id="yr"></span></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="shared/supabase-config.js"></script>
+<script src="certificate.js"></script>
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+let COURSE_ID = null, sbC = null;
+
+let QUESTIONS = [
+  {q:"ما الفكرة الجوهرية التي يقوم عليها «وكيل الذكاء الاصطناعي» (AI Agent)؟", o:["يجيب عن الأسئلة فقط","يخزّن الملفات","ينفّذ المهام بشكل مستقل لا مجرد الإجابة","يصمّم الشعارات"], a:2},
+  {q:"بماذا وُصف تحوّل الذكاء الاصطناعي في هذا الموسم؟", o:["من المساعد المجيب إلى الموظف الرقمي المنفّذ","من الحاسوب إلى الجوال","من النص إلى الصورة","من الإنترنت إلى دون إنترنت"], a:0},
+  {q:"حين نقول «هل نودّع الشات بوت؟» فالمقصود أنّ:", o:["الشات بوت انتهى تماماً","الذكاء الاصطناعي فشل","لا جديد يُذكر","المرحلة تطوّرت نحو وكلاء ينفّذون المهام"], a:3},
+  {q:"ما المقصود بـ«عصر الخداع الذكي»؟", o:["ألعاب الذكاء","أنّ أدوات الاحتيال صارت أكثر إقناعاً بفضل الذكاء الاصطناعي","خداع بصري في التصاميم","تسريع الحواسيب"], a:1},
+  {q:"موضوع الحلقات حول أدوات أتمتة الأعمال يجيب عن سؤال:", o:["كم سعر الأداة فقط","لون واجهة الأداة","أيّ أداة أستخدم ومتى","اسم مطوّر الأداة"], a:2},
+  {q:"ما الحدث التقني الذي خُصّصت له حلقة في هذا الموسم؟", o:["مؤتمر Google I/O 2026","كأس العالم","معرض الكتاب","سباق فورمولا"], a:0},
+  {q:"ما حدود الاعتماد على الذكاء الاصطناعي في بناء النماذج الأولية؟", o:["لا حدود إطلاقاً","لا يصلح لأي نموذج","يعمل دون أوامر","يبني نماذج بسرعة لكنه يحتاج مراجعة الإنسان"], a:3},
+  {q:"بأي أداة جرت التجربة العملية لبناء موقع المبادرة؟", o:["الرسام","Claude Code","الآلة الحاسبة","برنامج عروض"], a:1},
+  {q:"ما الجديد في تقديم الموسم الثاني من البرنامج؟", o:["بثّ مرئي فقط","حلقات بلا ضيف","مذيع افتراضي بالذكاء الاصطناعي","لغة إنجليزية"], a:2},
+  {q:"ما اسم المنصة التي تعرّفنا عليها للانتقال من المساعد إلى الوكيل؟", o:["OpenClaw","Excel","Photoshop","WhatsApp"], a:0},
+];
+let PASS = 7;
+
+const qWrap = document.getElementById('questions');
+function buildQuestions(){
+  qWrap.innerHTML='';
+  QUESTIONS.forEach((item,i)=>{
+    const div=document.createElement('div'); div.className='q'; div.id='q'+i;
+    div.innerHTML='<h3>'+(i+1)+'. '+item.q+'</h3>'+item.o.map((opt,j)=>`<label><input type="radio" name="q${i}" value="${j}">${opt}</label>`).join('');
+    qWrap.appendChild(div);
+  });
+}
+buildQuestions();
+
+async function loadCourseFromSupabase(){
+  if(!window.SUPABASE_READY) return;
+  try{
+    sbC=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY);
+    const {data:courses}=await sbC.from('courses').select('id,body_html,pass_score').eq('slug','ai-agents-2').limit(1);
+    if(courses&&courses.length){
+      COURSE_ID=courses[0].id; PASS=courses[0].pass_score||PASS;
+      if(courses[0].body_html){const art=document.querySelector('article .container'); if(art)art.innerHTML=courses[0].body_html;}
+      const {data:qs}=await sbC.from('quiz_questions').select('question,options,answer_index').eq('course_id',COURSE_ID).order('sort_order');
+      if(qs&&qs.length){QUESTIONS=qs.map(q=>({q:q.question,o:Array.isArray(q.options)?q.options:JSON.parse(q.options),a:q.answer_index})); buildQuestions();}
+    }
+  }catch(_){}
+}
+loadCourseFromSupabase();
+
+document.getElementById('submitBtn').addEventListener('click',async()=>{
+  const name=document.getElementById('studentName').value.trim();
+  const box=document.getElementById('resultBox');
+  if(!name){box.className='result fail';box.textContent='فضلاً أدخل اسمك أولاً ليظهر في الشهادة.';document.getElementById('studentName').focus();return;}
+  let score=0;
+  QUESTIONS.forEach((item,i)=>{
+    const el=document.getElementById('q'+i);
+    const ch=document.querySelector(`input[name="q${i}"]:checked`);
+    const ok=ch&&parseInt(ch.value)===item.a;
+    el.className='q '+(ok?'correct':'wrong'); if(ok)score++;
+  });
+  const passed=score>=PASS;
+  if(sbC){ sbC.from('exam_results').insert({course_id:COURSE_ID,name,score,total:QUESTIONS.length,passed}).then(()=>{},()=>{}); }
+  if(passed){
+    box.className='result pass';
+    box.textContent=`ممتاز يا ${name}! نتيجتك ${score} من ${QUESTIONS.length} — تم إنشاء شهادتك بالأسفل.`;
+    await drawCertificate(document.getElementById('certCanvas'),{
+      kind:'quiz', name, score, total:QUESTIONS.length,
+      line1:'لاجتيازه بنجاح اختبار «الموسم الثاني: وكلاء الذكاء الاصطناعي»',
+      line2:'ضمن المسار التعليمي المبني على حلقات برنامج خوارزميات'
+    });
+    document.getElementById('certificate').style.display='block';
+    document.getElementById('certificate').scrollIntoView({behavior:'smooth'});
+  }else{
+    box.className='result fail';
+    box.textContent=`نتيجتك ${score} من ${QUESTIONS.length}. تحتاج ${PASS} إجابات صحيحة — راجع الملخّص أعلاه وأعد المحاولة، الأخطاء محددة بالأحمر.`;
+    document.getElementById('certificate').style.display='none';
+  }
+});
+document.getElementById('downloadBtn').addEventListener('click',()=>downloadCanvas('certCanvas','AIforAll-Certificate-Season2.png'));
+</script>
+</body>
+</html>
