@@ -220,9 +220,11 @@ async function loadFromSupabase(){
   if (!window.SUPABASE_READY) return;
   try {
     sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    // season 1 only — !inner + eq filters the parent rows, not just the join
     const { data, error } = await sb
       .from('episodes')
-      .select('id,number,title,tagline,description,audio_url,youtube_id, seasons(number)')
+      .select('id,number,title,tagline,description,audio_url,youtube_id, seasons!inner(number)')
+      .eq('seasons.number', 1)
       .order('number');
     if (error || !data || !data.length) return; // keep static fallback
     CURRENT = data.map(e => ({
@@ -234,10 +236,11 @@ async function loadFromSupabase(){
     logEvent('visit', null);
   } catch(_) { /* stay on static */ }
 }
-function logEvent(type, episodeId, seconds){
-  if (!sb) return;
-  sb.from('events').insert({ type, episode_id: episodeId || null, seconds: seconds || null, session_id: SESSION }).then(()=>{}, ()=>{});
-}
+// Analytics is being replaced by shared/analytics.js (typed events + real
+// session rows). The old shape ('visit'/'play_start', string session id) is
+// rejected by the new schema, so it stays disabled rather than firing
+// requests that always fail. Re-enabled via the new module.
+function logEvent(){ /* no-op until analytics.js lands */ }
 loadFromSupabase();
 
 let lastLoggedSec = 0;

@@ -154,7 +154,8 @@ footer{background:#08121f;padding:32px 0;text-align:center;color:var(--muted);fo
 <script src="certificate.js"></script>
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
-const TOTAL = EPISODES2.length;
+let EPISODES = EPISODES2.slice();      // static fallback; replaced by live data below
+let TOTAL = EPISODES.length;
 const DONE_KEY = 'aifa_l2_listened';
 let listened = new Set(JSON.parse(localStorage.getItem(DONE_KEY) || '[]'));
 
@@ -167,7 +168,7 @@ function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg
 
 function renderList(){
   list.innerHTML='';
-  EPISODES2.forEach(ep=>{
+  EPISODES.forEach(ep=>{
     const div=document.createElement('div');
     div.className='ep'+(listened.has(ep.n)?' done':'');
     div.id='ep'+ep.n;
@@ -210,10 +211,32 @@ player.addEventListener('ended',()=>{
     else toast(CHEERS[Math.floor(Math.random()*CHEERS.length)]+`  (${listened.size}/${TOTAL})`);
   }
   // auto-advance
-  const next=EPISODES2.find(e=>e.n===n+1);
+  const next=EPISODES.find(e=>e.n===n+1);
   if(next) play(next,document.getElementById('ep'+next.n));
 });
 renderList();
+
+// Load season 2 live from Supabase when configured; keep static list otherwise.
+(async function loadLive(){
+  if(!window.SUPABASE_READY) return;
+  try{
+    const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    const { data, error } = await sb
+      .from('episodes')
+      .select('id,number,title,tagline,description,audio_url,youtube_id, seasons!inner(number)')
+      .eq('seasons.number', 2)
+      .order('number');
+    if(error || !data || !data.length) return;   // keep static fallback
+    EPISODES = data.map(e=>({
+      id:e.id, n:e.number, title:e.title, tagline:e.tagline||'',
+      desc:e.description||'',
+      audio:e.audio_url||('audio/ep'+String(e.number).padStart(2,'0')+'.mp3'),
+      youtube:e.youtube_id||''
+    }));
+    TOTAL = EPISODES.length;
+    renderList();
+  }catch(_){ /* stay on static */ }
+})();
 
 // ---------- listening certificate ----------
 document.getElementById('listenCertBtn').addEventListener('click',async()=>{
