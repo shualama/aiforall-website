@@ -362,15 +362,17 @@
     const cards = $("#statCards");
     cards.innerHTML = '<div class="spin">…</div>';
     // pull events + results + episodes (titles)
+    // Column/event names follow the v2 schema: duration_sec (not seconds),
+    // and the typed event enum (audio_started / audio_progress / page_view).
     const [events, results, eps] = await Promise.all([
-      guard(sb.from("events").select("type,episode_id,seconds,session_id").limit(50000)),
+      guard(sb.from("events").select("type,episode_id,duration_sec,session_id").limit(50000)),
       guard(sb.from("exam_results").select("passed,score").limit(50000)),
       guard(sb.from("episodes").select("id,number,title")),
     ]);
     const visitors = new Set(events.filter((e) => e.session_id).map((e) => e.session_id)).size;
-    const plays = events.filter((e) => e.type === "play_start").length;
-    const playSessions = new Set(events.filter((e) => e.type === "play_start").map((e) => e.session_id)).size;
-    const seconds = events.filter((e) => e.type === "play_progress").reduce((a, e) => a + (Number(e.seconds) || 0), 0);
+    const plays = events.filter((e) => e.type === "audio_started").length;
+    const playSessions = new Set(events.filter((e) => e.type === "audio_started").map((e) => e.session_id)).size;
+    const seconds = events.filter((e) => e.type === "audio_progress").reduce((a, e) => a + (Number(e.duration_sec) || 0), 0);
     const hrs = Math.floor(seconds / 3600), mins = Math.round((seconds % 3600) / 60);
     const examCount = results.length;
     const passCount = results.filter((r) => r.passed).length;
@@ -386,7 +388,7 @@
 
     // plays per episode chart (top 10)
     const byEp = {};
-    events.filter((e) => e.type === "play_start" && e.episode_id).forEach((e) => (byEp[e.episode_id] = (byEp[e.episode_id] || 0) + 1));
+    events.filter((e) => e.type === "audio_started" && e.episode_id).forEach((e) => (byEp[e.episode_id] = (byEp[e.episode_id] || 0) + 1));
     const titleOf = {}; eps.forEach((e) => (titleOf[e.id] = e.number + ". " + e.title));
     const rows = Object.entries(byEp).map(([id, n]) => ({ lbl: titleOf[id] || "—", n }))
       .sort((a, b) => b.n - a.n).slice(0, 10);
